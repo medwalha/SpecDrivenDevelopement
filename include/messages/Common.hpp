@@ -25,32 +25,12 @@ using uint64 = std::uint64_t;
 using int64  = std::int64_t;
 
 // ---------------------------------------------------------------------------
-// Domain types — replace the stubs with the real definitions provided by the
-// project. Kept here so the messages compile in isolation.
+// Domain structs (Decimal, TimestampNano, RptGrpHeader, FramingHeader,
+// UnitHeader, GeoPosition) live in include/messages/types/Structs.hpp.
+// They are pulled in at the bottom of this header for backward compatibility:
+// legacy code referring to `protocol::messages::Decimal` keeps compiling
+// thanks to the using-aliases re-exported from Structs.hpp.
 // ---------------------------------------------------------------------------
-
-/// Decimal price/quantity placeholder.
-/// TODO: replace by the real Decimal type used by the project.
-struct Decimal
-{
-    int64 mantissa = 0;
-    int8  exponent = 0;
-};
-inline std::ostream& operator<<(std::ostream& os, Decimal const& d)
-{
-    return os << d.mantissa << "e" << static_cast<int>(d.exponent);
-}
-
-/// Nanosecond timestamp placeholder.
-/// TODO: replace by the real TimestampNano type used by the project.
-struct TimestampNano
-{
-    uint64 ns = 0;
-};
-inline std::ostream& operator<<(std::ostream& os, TimestampNano const& t)
-{
-    return os << t.ns << "ns";
-}
 
 // ---------------------------------------------------------------------------
 // InputData — opaque view over a raw byte buffer.
@@ -80,3 +60,11 @@ public:
 #define DUMP_FIELD_AS_INT(NAME) << "  " #NAME "=" << static_cast<int>(get##NAME()) << "\n"
 
 } // namespace protocol::messages
+
+// ---------------------------------------------------------------------------
+// Pull in the consolidated reusable structs AFTER the basic typedefs and
+// InputData / DUMP_FIELD have been declared. Structs.hpp itself includes
+// Common.hpp, but `#pragma once` short-circuits the recursion.
+// ---------------------------------------------------------------------------
+#include "messages/types/Structs.hpp"
+
