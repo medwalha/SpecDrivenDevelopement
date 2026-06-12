@@ -9,6 +9,9 @@ Ces règles s'appliquent à **tout code C++** généré dans ce projet, en parti
 
 > ⚠️ Ce projet utilise un **style maison spécifique** (préfixe `m_`, typedefs courts, classe wrapper sur `reinterpret_cast`, macros `DUMP_FIELD`). **Ne pas substituer** par les conventions standard `std::uint8_t` / `snake_case` — la cohérence avec la base existante prime.
 
+> 📐 **ADR-0001** : les champs d'une struct de message portent **toujours** le primitif binaire brut (typedef de `Common.hpp`, `char[N]`, stub domaine `Decimal`/`TimestampNano`, ou struct composé de `types/Structs.hpp`). **Aucun** nom d'enum, de bitmap, ou de typedef-alias n'apparaît comme type de champ. La sémantique est exposée à côté du champ (commentaire `/// see types::<Name>`) et consommée par la logique métier. Voir [docs/adr/0001-message-struct-uses-raw-primitives.md](../../docs/adr/0001-message-struct-uses-raw-primitives.md) et [CONTEXT.md](../../CONTEXT.md).
+
+
 ## 1. Typedefs autorisés (et obligatoires)
 
 Tous les champs de message **doivent** utiliser ces typedefs (déclarés dans `include/messages/Common.hpp`) :
