@@ -1,22 +1,68 @@
 // SPDX-License-Identifier: TODO
+// =============================================================================
+// Type insertion template — sections to APPEND inside the consolidated files
+// under include/messages/types/. NEVER create a per-type .hpp file: use the
+// 4 category files (Aliases.hpp / Enums.hpp / Bitmaps.hpp / Structs.hpp).
+//
 // Auto-generated from {{SPEC_PDF}} — section/table {{SPEC_SECTION}}
 // Spec version: {{SPEC_VERSION}}   Generated: {{DATE}}
-// Category: {{CATEGORY}}            (struct | enum | bitfield | alias)
+// Category: {{CATEGORY}}            (alias | enum | bitmap | struct)
 // Do not edit manually unless spec changed.
+// =============================================================================
+//
+// Choose ONE block depending on CATEGORY and PASTE it (sorted alphabetically)
+// inside the matching category file. The surrounding `namespace
+// protocol::messages::types { ... }` block is already present in the file —
+// only paste the section content (separator + doc + type definition +
+// asserts + constants).
 
-#pragma once
+// ---- (1) ALIAS  → paste into include/messages/types/Aliases.hpp -------------
 
-#include <type_traits>
+// === {{TYPE_NAME}} — §{{SPEC_SECTION}} =======================================
+/// {{BRIEF_DESCRIPTION}}
+/// @see {{SPEC_PDF}} §{{SPEC_SECTION}}
+using {{TYPE_NAME}} = {{UNDERLYING_TYPE}};   // ex: char[12], int64, uint64
 
-#include "messages/Common.hpp"
+inline constexpr unsigned int {{NAME_UPPER}}_SIZE = {{EXPECTED_SIZE}};
+static_assert(sizeof({{TYPE_NAME}}) == {{NAME_UPPER}}_SIZE,
+              "{{TYPE_NAME}} size mismatch with spec ({{EXPECTED_SIZE}} bytes)");
 
-namespace {{NAMESPACE}} {
 
-// ============================================================================
-// Choose ONE block depending on CATEGORY. Delete the unused blocks.
-// ============================================================================
+// ---- (2) ENUM   → paste into include/messages/types/Enums.hpp ---------------
 
-// ---- (1) STRUCT ------------------------------------------------------------
+// === {{TYPE_NAME}} — §{{SPEC_SECTION}} =======================================
+/// {{BRIEF_DESCRIPTION}}
+/// @see {{SPEC_PDF}} §{{SPEC_SECTION}}
+enum class {{TYPE_NAME}} : {{UNDERLYING_TYPE}}    // uint8 / uint16 / char
+{
+    {{ENUM_VALUES}}   // ex: Ok = 0x00, Error = 0xFF, Bid = '0'
+};
+
+inline constexpr unsigned int {{NAME_UPPER}}_SIZE = sizeof({{TYPE_NAME}});
+static_assert({{NAME_UPPER}}_SIZE == {{EXPECTED_SIZE}},
+              "{{TYPE_NAME}} underlying size mismatch with spec ({{EXPECTED_SIZE}} byte(s))");
+
+
+// ---- (3) BITMAP → paste into include/messages/types/Bitmaps.hpp -------------
+
+// === {{TYPE_NAME}}Bitmap — §{{SPEC_SECTION}} =================================
+/// {{BRIEF_DESCRIPTION}}
+/// @see {{SPEC_PDF}} §{{SPEC_SECTION}}
+using {{TYPE_NAME}}Bitmap = {{UNDERLYING_TYPE}};   // typically uint8
+
+inline constexpr {{UNDERLYING_TYPE}} {{NAME_UPPER}}_NONE_VALUE = 0x00;
+inline constexpr {{UNDERLYING_TYPE}} {{NAME_UPPER}}_FOO_MASK   = 0x01;   // ex
+inline constexpr {{UNDERLYING_TYPE}} {{NAME_UPPER}}_BAR_MASK   = 0x02;   // ex
+// ... add more masks as needed, alphabetical inside the bitmap is OK ...
+
+inline constexpr unsigned int {{NAME_UPPER}}_BITMAP_SIZE = sizeof({{TYPE_NAME}}Bitmap);
+static_assert({{NAME_UPPER}}_BITMAP_SIZE == {{EXPECTED_SIZE}},
+              "{{TYPE_NAME}}Bitmap size mismatch with spec ({{EXPECTED_SIZE}} byte(s))");
+
+
+// ---- (4) STRUCT → paste into include/messages/types/Structs.hpp -------------
+
+// === {{TYPE_NAME}} — §{{SPEC_SECTION}} =======================================
 #pragma pack(push, 1)
 
 /// {{BRIEF_DESCRIPTION}}
@@ -28,39 +74,11 @@ struct {{TYPE_NAME}}
 
 #pragma pack(pop)
 
-static_assert(sizeof({{TYPE_NAME}}) == {{EXPECTED_SIZE}},
+inline constexpr unsigned int {{NAME_UPPER}}_SIZE = {{EXPECTED_SIZE}};
+static_assert(sizeof({{TYPE_NAME}}) == {{NAME_UPPER}}_SIZE,
               "{{TYPE_NAME}} size mismatch with spec ({{EXPECTED_SIZE}} bytes)");
 static_assert(std::is_standard_layout<{{TYPE_NAME}}>::value,
               "{{TYPE_NAME}} must be standard-layout");
 static_assert(std::is_trivially_copyable<{{TYPE_NAME}}>::value,
               "{{TYPE_NAME}} must be trivially copyable");
 
-// ---- (2) ENUM --------------------------------------------------------------
-/// {{BRIEF_DESCRIPTION}}
-/// @see {{SPEC_PDF}} §{{SPEC_SECTION}}
-enum class {{TYPE_NAME}} : {{UNDERLYING_TYPE}}    // uint8 / uint16 / uint32
-{
-    {{ENUM_VALUES}}   // ex: Ok = 0x00, Error = 0xFF
-};
-
-// ---- (3) BITFIELD ----------------------------------------------------------
-// Bit ordering is implementation-defined.
-// Target compiler: {{TARGET_COMPILER}} ({{BIT_ORDER}}-first).
-#pragma pack(push, 1)
-
-struct {{TYPE_NAME}}
-{
-    {{BITFIELDS}}    // ex: uint8 m_Ready : 1; uint8 m_Reserved : 7;
-};
-
-#pragma pack(pop)
-
-static_assert(sizeof({{TYPE_NAME}}) == {{EXPECTED_SIZE}},
-              "{{TYPE_NAME}} size mismatch with spec ({{EXPECTED_SIZE}} bytes)");
-
-// ---- (4) ALIAS -------------------------------------------------------------
-/// {{BRIEF_DESCRIPTION}}
-/// @see {{SPEC_PDF}} §{{SPEC_SECTION}}
-using {{TYPE_NAME}} = {{UNDERLYING_TYPE}};
-
-} // namespace {{NAMESPACE}}
