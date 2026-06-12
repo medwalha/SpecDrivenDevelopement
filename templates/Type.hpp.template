@@ -1,0 +1,66 @@
+// SPDX-License-Identifier: TODO
+// Auto-generated from {{SPEC_PDF}} — section/table {{SPEC_SECTION}}
+// Spec version: {{SPEC_VERSION}}   Generated: {{DATE}}
+// Category: {{CATEGORY}}            (struct | enum | bitfield | alias)
+// Do not edit manually unless spec changed.
+
+#pragma once
+
+#include <type_traits>
+
+#include "messages/Common.hpp"
+
+namespace {{NAMESPACE}} {
+
+// ============================================================================
+// Choose ONE block depending on CATEGORY. Delete the unused blocks.
+// ============================================================================
+
+// ---- (1) STRUCT ------------------------------------------------------------
+#pragma pack(push, 1)
+
+/// {{BRIEF_DESCRIPTION}}
+/// @see {{SPEC_PDF}} §{{SPEC_SECTION}}
+struct {{TYPE_NAME}}
+{
+    {{FIELDS}}   // ex: int32 m_LatitudeE7;  uint32 m_AccuracyMm;
+};
+
+#pragma pack(pop)
+
+static_assert(sizeof({{TYPE_NAME}}) == {{EXPECTED_SIZE}},
+              "{{TYPE_NAME}} size mismatch with spec ({{EXPECTED_SIZE}} bytes)");
+static_assert(std::is_standard_layout<{{TYPE_NAME}}>::value,
+              "{{TYPE_NAME}} must be standard-layout");
+static_assert(std::is_trivially_copyable<{{TYPE_NAME}}>::value,
+              "{{TYPE_NAME}} must be trivially copyable");
+
+// ---- (2) ENUM --------------------------------------------------------------
+/// {{BRIEF_DESCRIPTION}}
+/// @see {{SPEC_PDF}} §{{SPEC_SECTION}}
+enum class {{TYPE_NAME}} : {{UNDERLYING_TYPE}}    // uint8 / uint16 / uint32
+{
+    {{ENUM_VALUES}}   // ex: Ok = 0x00, Error = 0xFF
+};
+
+// ---- (3) BITFIELD ----------------------------------------------------------
+// Bit ordering is implementation-defined.
+// Target compiler: {{TARGET_COMPILER}} ({{BIT_ORDER}}-first).
+#pragma pack(push, 1)
+
+struct {{TYPE_NAME}}
+{
+    {{BITFIELDS}}    // ex: uint8 m_Ready : 1; uint8 m_Reserved : 7;
+};
+
+#pragma pack(pop)
+
+static_assert(sizeof({{TYPE_NAME}}) == {{EXPECTED_SIZE}},
+              "{{TYPE_NAME}} size mismatch with spec ({{EXPECTED_SIZE}} bytes)");
+
+// ---- (4) ALIAS -------------------------------------------------------------
+/// {{BRIEF_DESCRIPTION}}
+/// @see {{SPEC_PDF}} §{{SPEC_SECTION}}
+using {{TYPE_NAME}} = {{UNDERLYING_TYPE}};
+
+} // namespace {{NAMESPACE}}
