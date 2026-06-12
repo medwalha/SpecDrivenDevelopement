@@ -1,0 +1,70 @@
+// SPDX-License-Identifier: TODO
+// Auto-generated from {{SPEC_PDF}} — section {{SPEC_SECTION}}
+// Spec version: {{SPEC_VERSION}}   Generated: {{DATE}}
+// Do not edit manually unless spec changed.
+
+#pragma once
+
+#include <ostream>
+#include <string>
+#include <type_traits>
+
+#include "messages/Common.hpp"
+#include "messages/MessageHeader.hpp"
+#include "messages/MessageIds.hpp"
+// #include "messages/types/<UsedType>.hpp"   // add includes for any reusable types
+
+namespace {{NAMESPACE}} {
+
+#pragma pack(push, 1)
+
+/// {{BRIEF_DESCRIPTION}}
+/// @see {{SPEC_PDF}} §{{SPEC_SECTION}}
+struct {{MESSAGE_NAME}}Struct
+{
+    {{FIELDS}}
+};
+
+#pragma pack(pop)
+
+static_assert(sizeof({{MESSAGE_NAME}}Struct) == {{EXPECTED_PAYLOAD_SIZE}},
+              "{{MESSAGE_NAME}}Struct size mismatch with spec ({{EXPECTED_PAYLOAD_SIZE}} bytes)");
+static_assert(std::is_standard_layout<{{MESSAGE_NAME}}Struct>::value,
+              "{{MESSAGE_NAME}}Struct must be standard-layout");
+static_assert(std::is_trivially_copyable<{{MESSAGE_NAME}}Struct>::value,
+              "{{MESSAGE_NAME}}Struct must be trivially copyable");
+
+class {{MESSAGE_NAME}}
+{
+    MessageHeader              const   m_MessageHeader;
+    {{MESSAGE_NAME}}Struct     const & m_Struct;
+public:
+    static constexpr const uint16  TYPE = {{MESSAGE_TYPE}};
+    static constexpr const char*   NAME = "{{MESSAGE_NAME}}";
+    static const unsigned int      SIZE = MessageHeader::SIZE + sizeof({{MESSAGE_NAME}}Struct);
+
+    explicit {{MESSAGE_NAME}}(InputData const & data)
+    : m_MessageHeader(data)
+    , m_Struct(*reinterpret_cast<const {{MESSAGE_NAME}}Struct*>(data.data() + MessageHeader::SIZE))
+    {
+    }
+
+    // ---- Getters (one per field, in spec order) ----
+    {{GETTERS}}
+
+    virtual void dump(std::ostream & os) const
+    {
+        m_MessageHeader.dump(os);
+        os
+        {{DUMP_FIELDS}}
+        ;
+    }
+};
+
+inline std::ostream& operator<<(std::ostream& out, const {{MESSAGE_NAME}}& obj)
+{
+    obj.dump(out);
+    return out;
+}
+
+} // namespace {{NAMESPACE}}
