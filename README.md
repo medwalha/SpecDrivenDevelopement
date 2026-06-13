@@ -1,5 +1,12 @@
 # PDF → C++ Messages — Workflow (style maison)
 
+> ⚠️ **DEPRECATED — 2026-06-13.** This repository has been superseded by the
+> [`pdf-to-cpp-types`](https://github.com/WalhaMarketDataAi/MarketDataAi/blob/main/.agents/skills/pdf-to-cpp-types/SKILL.md)
+> and [`pdf-to-cpp-messages`](https://github.com/WalhaMarketDataAi/MarketDataAi/blob/main/.agents/skills/pdf-to-cpp-messages/SKILL.md)
+> skills inside [`WalhaMarketDataAi/MarketDataAi`](https://github.com/WalhaMarketDataAi/MarketDataAi).
+> All future work on the PDF → C++ pipeline happens there. This repo is kept for
+> historical reference only — do not open issues or PRs against it.
+
 Workflow VS Code / Copilot pour générer des **structures de messages C++ au style maison** à partir d'un **PDF de spécification** (ICD, protocole binaire de marché, etc.).
 
 ## Style maison généré
